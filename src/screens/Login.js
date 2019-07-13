@@ -76,7 +76,7 @@ body:JSON.stringify({
         else
         {
           this._storeData(response);
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Aganda');
 
         }
     })
