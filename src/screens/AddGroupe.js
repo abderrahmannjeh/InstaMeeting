@@ -32,7 +32,10 @@ export default class AddGroup extends Component {
             selectMemeber:[],
             nvMemebr:{email:'',nom:''},
             owner:'',
-            headers:['email ','nom']
+            headers:['email ','nom'],
+            nom:'',
+            description:'',
+            groupeId:0
 
 
         }
@@ -55,17 +58,14 @@ export default class AddGroup extends Component {
        } 
 
 addNomber=()=>{
-    var tab=this.state.memebers
     
-    tab.push([this.state.nvMemebr.email,this.state.nvMemebr.nom])
-    var selected=this.state.selectMemeber;
-    selected.push({"email":this.state.nvMemebr.email,"nom":this.state.nvMemebr.nom})
-    this.setState({memebers:tab});
-    this.setState({selectMemeber:selected})
+
+  
+  
 }
 
 saveGroupe=()=>{
-    fetch('http://192.168.1.51:3000/groupe/',{
+    fetch('http://192.168.1.28:3000/groupe/',{
         method:'POST',
         headers:{
             Accept: 'application/json',
@@ -83,6 +83,8 @@ saveGroupe=()=>{
       .then(response=>{
 
         alert(response.message)
+        if(response.success==true)
+        this.setState({groupeId:response.groupeId})
 
 
 
@@ -109,16 +111,34 @@ saveGroupe=()=>{
 
             
             <Body>
-              <Title>Groupe</Title>
+              <Title>Type</Title>
             </Body>
 
             
           </Header>
+         
+         <Container style={styles.container}>
+         <Form style={{marginTop:50}}>
+            <Item stackedLabel>
+              <Label>Titre</Label>
+              <Input onChangeText={(text)=>this.setState({nom:text})}/>
+            </Item>
+            <Item stackedLabel last>
+              <Label>Description</Label>
+              <Input onChangeText={(text)=>this.setState({description:text})}/>
+            </Item>
+            <Button block onPress={()=>{this.saveGroupe()}}>
+            <Text>Ajouter type</Text>
+          </Button>
+          </Form>
+
+
+
+
+         </Container>
+         
          <Container style={styles.container} >
-
-
-
-        <ScrollView>
+            <ScrollView>
         <Form style={{marginTop:50}}>
             <Item stackedLabel>
               <Label>Memeber Email</Label>

@@ -53,6 +53,8 @@ loginButton: {
   backgroundColor: '#3897f1',
   borderRadius: 5,
   height: 45,
+  width:100,
+  marginLeft:20,
   marginTop: 10,
 },
 fbLoginButton: {

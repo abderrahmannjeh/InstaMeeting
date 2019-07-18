@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 import styles from "./styles";
-import {Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView,StyleSheet} from 'react-native';
+import {Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView,StyleSheet,ToastAndroid} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -12,11 +12,23 @@ static navigationOptions= {
 }
   state={
     password:'',
-    email :''
+    email :'',
+    emailEr:false,
+    PasswordEr:false,
+    change:false
  }
  handleEmail=(text)=>{
-  this.setState({email:text})}
- handlePassword=(text)=>{this.setState({password:text})}
+   if(this.state.change==false)
+   this.setState({change:true})
+    text==''?this.setState({emailEr:true}):this.setState({emailEr:false});
+   this.setState({email:text})}
+ handlePassword=(text)=>{
+  if(this.state.change==false)
+  this.setState({change:true})
+   text==''?this.setState({PasswordEr:true}):this.setState({PasswordEr:false}); 
+  this.setState({password:text})}
+
+
  componentDidMount(){
 
   this._subscribe = this.props.navigation.addListener('didFocus',this.loadCredentials)
@@ -53,8 +65,9 @@ _storeData =async (response)=>{
 
 }
 Login=()=>{
+  if(this.state.change==true && this.state.emailEr==false && this.state.PasswordEr==false)
 
-fetch('http://192.168.1.51:3000/users',{
+{fetch('http://192.168.1.28:3000/users',{
 
 method:'POST',
 headers:{
@@ -72,7 +85,8 @@ body:JSON.stringify({
     .then(response => {
         
         if(response.success===false)
-          alert(response.message)
+        ToastAndroid.show(response.message, ToastAndroid.SHORT);
+
         else
         {
           this._storeData(response);
@@ -88,6 +102,7 @@ body:JSON.stringify({
 
 
 }
+}
 
 
 
@@ -96,29 +111,37 @@ body:JSON.stringify({
    
 
     return(
-      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
-
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
           <Text style={styles.logoText}>InstaMeeting</Text>
             <TextInput placeholder="Email" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} onChangeText={this.handleEmail} />
+            {this.state.emailEr?<Text style={{color: 'red'}}>Email est require</Text>:<Text></Text>}
             <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} onChangeText={this.handlePassword}/>
+            {this.state.PasswordEr?<Text style={{color: 'red'}}>mots de passe est require</Text>:<Text></Text>}   
+            <View style={ {
+              flexDirection: 'row',
+              alignItems: 'center',
+               justifyContent: 'center',
+              }}>
             <Button
-              buttonStyle={styles.loginButton}
+              buttonStyle={{width:100, margin:30}}
               onPress={() => this.Login()}
               title="Login"
             />
             <Button
-              buttonStyle={styles.fbLoginButton}
-              onPress={() => {}}
-              title="Login with Facebook"
-              color="#3897f1"
+              buttonStyle={{width:100,margin:30}}
+              onPress={() => {this.props.navigation.navigate('Register')}}
+              title="Register"
+              
+              color="#D55E2A"
             />
+            </View>
+          
           </View>
+         
         </View>
-      </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      
     )
 
   }

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {ExpandableCalendar,  CalendarProvider} from 'react-native-calendars';
 import WeekView  from 'react-native-week-view';
-import { Icon,Fab } from 'native-base';
+import { Icon,Fab, Container,Header,Left,Body,Title,Button,Right } from 'native-base';
 
 
 
@@ -52,7 +52,7 @@ export default class ExpandableCalendarScreen extends Component {
      }
      getListReunion=(date)=>{
    
-       fetch("http://192.168.1.51:3000/Reunion/getUtilisateurRenion",{
+       fetch("http://192.168.1.28:3000/Reunion/getUtilisateurRenion",{
          method:'POST',
          headers:{
            Accept: 'application/json',
@@ -119,7 +119,20 @@ export default class ExpandableCalendarScreen extends Component {
 
   render() {    
     return (
-      <CalendarProvider 
+      <Container>
+ <Header>
+          <Left>
+            <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
+              <Icon name='menu' />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Home</Title>
+          </Body>
+          <Right />
+        </Header>
+
+        <CalendarProvider 
         date={this.state.selecteedDate} 
         
         onDateChanged={this.onDateChanged} 
@@ -145,7 +158,7 @@ export default class ExpandableCalendarScreen extends Component {
        selectedDate={this.state.dates}
        numberOfDays={1}
        events={this.state.events}
-       onEventPress={(event) => this.props.navigation.navigate('AddReunion',{'id':event.id})}
+       onEventPress={(event) => this.props.navigation.navigate('EditeReunion',{'id':event.id})}
        headerStyle={styles.headerStyle}
        formatDateHeader="MMM D"
        locale="fr"
@@ -157,7 +170,9 @@ export default class ExpandableCalendarScreen extends Component {
               <Icon name='add'></Icon>
           </Fab>
       </CalendarProvider>
-    );
+
+      </Container>
+         );
   }
 }
 

@@ -17,8 +17,7 @@ import {
   Picker,
   Textarea,
   FooterTab,
-  Footer,
-  Fab
+  Footer
 } from "native-base";
 import {StyleSheet} from 'react-native';
 import DatePicker from 'react-native-datepicker'
@@ -52,89 +51,135 @@ export default class AddReunion extends Component {
 
 }
 
-save=()=>{
 
 
 
 
-fetch('http://192.168.1.28:3000/reunion/',{
+update=()=>{
+  
 
-  method:'POST',
-  headers:{
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-  },
-  body:JSON.stringify({
-    "id":this.state.id,
-    "titre":this.state.titre,
-    "respPv":this.state.respPv,
-    "respVe":this.state.respVe,
-    "commentaire":this.state.commentaire,
-   "groupeId":this.state.selectedGroupe,
-    "date":this.state.date,
-    "duree":this.state.duree,
-      "lieu":this.state.lieu,
-    "debut":this.state.debut,
-    "fin":this.state.fin,
-    memebers:[]
+
+
+  fetch('http://192.168.1.28:3000/reunion/update',{
+  
+    method:'POST',
+    headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body:JSON.stringify({
+      "id":this.state.id,
+      "titre":this.state.titre,
+      "respPv":this.state.respPv,
+      "respVe":this.state.respVe,
+      "commentaire":this.state.commentaire,
+     "groupeId":this.state.selectedGroupe,
+      "date":this.state.date,
+      "duree":this.state.duree,
+        "lieu":this.state.lieu,
+      "debut":this.state.debut,
+      "fin":this.state.fin,
+      
+    })
+  
+  
+      }).then(response=>response.json())
+      .then(response=>{
+        if(response.success===false)
+        {
+          alert(response.message)
+  
+        }
+        else
+        {
+          
+          
+          
+          
+  
+        }
+  
+  
+  
+  
   })
-
-
-    }).then(response=>response.json())
-    .then(response=>{
-      if(response.success===false)
-      {
-        alert(response.message)
-
-      }
-      else
-      {
-        RNCalendarEvents.saveEvent(this.state.titre, {startDate: this.state.date+'T'+this.state.debut+':00.000Z',
-      endDate: this.state.date+'T'+this.state.fin+':00.000Z'}, {});
-        this.setState({
-          show:true,
-    titre:'',
-    respPv:'',
-    respVe:'',
-    commentaire:'',
-    groupes:this.state.groupes,
-    owner:this.state.owner,
-    selectedGroupe:'',
-     groupeItems:undefined,
-     date:"2019-08-01",
-        duree:1,
-        lieu:"",
-        debut:"",
-        fin:"",
-
-        })
-        
-        alert(response.message)
-
-      }
+  
+  
+  
+  }
+  
 
 
 
 
-})
-
-
-
-}
 
 
 
  constructor(props)
 {
  super(props)
- 
  this.init()
+ 
 
 
 
 }
 
+didBlurSubscription = this.props.navigation.addListener(
+  'didFocus',
+  payload => {
+    this.init();
+    this.setState({operation:1})
+    if(this.props.navigation.state.params.id)
+    {   const id=this.props.navigation.state.params.id
 
+      this.setState({id:id})
+    this.setState({operation:2})
+      
+      fetch('http://192.168.1.28:3000/Reunion/getById',{
+        method:'POST',
+        headers:{
+          Accept: 'application/json',
+          'Content-Type': 'application/json'},
+    
+          body:JSON.stringify({
+            
+           "id":id
+         
+         }
+           )
+    
+    
+    
+      }).then(response=>response.json())
+        .then(response=>{
+          this.setState({
+    
+            titre:response.data.title,
+            respPv:response.data.respPv,
+            respVe:response.data.respVe,
+            commentaire:response.data.commentaire,
+        
+            selectedGroupe:response.data.id_groupe,
+            groupeItems:undefined,
+            date:response.data.date,
+            duree:response.data.duree,
+            lieu:response.data.lieu,
+            debut:response.data.debut,
+            fin:response.data.fin,
+    
+    
+    
+    
+    
+          })
+          
+    
+        })
+    
+    }
+  }
+);
 async init()
 {
   await this.GetConnectUser();
@@ -255,9 +300,9 @@ getGroupeMombeurs=(value)=>{
                </Item>
 
 
-              <Item stackedLabel style={{marginBottom:10}}>
+              <Item stackedLabel style={{marginBottom:15}}>
                 <Label>Titre:</Label>
-                <Input value={this.state.titre} style={{ borderColor: 'blue'}} onChangeText={(text)=>{this.setState({titre:text})}} />
+                <Input value={this.state.titre} style={{ borderColor: 'blue'}} onChangeText={(text)=>{this.state.titre=text}} />
               </Item>
               <Item>
               <Label>Resp PV:</Label>
@@ -299,11 +344,11 @@ getGroupeMombeurs=(value)=>{
 
                </Picker>
                </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
+            <Item stackedLabel style={{marginBottom:15}}>
             <Label>Lieu :</Label>
             <Input  value={this.state.lieu}  onChangeText={(text)=>{this.setState({lieu:text})}} />
           </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
+            <Item stackedLabel>
               <Label>Commentaire:</Label>
           <Input   value={this.state.commentaire}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
           </Item>
@@ -312,20 +357,19 @@ getGroupeMombeurs=(value)=>{
 
           <Footer >
           <FooterTab style={{backgroundColor:'white'}}>
-          
+          <Right>
+          <Button  iconLeft onPress={() => {this.setState({show:false})}}>
+            <Icon name="arrow-forward" />
+            <Text>Suivant</Text>
+          </Button>
+          </Right>
           </FooterTab>
           </Footer>
-         
+          
   
             
           </Content>
-          
         </Container>
-        <Fab position="bottomRight" onPress={() => {this.setState({show:false})}}
-        
-        >
-            <Icon name="arrow-forward" />
-            </Fab>
         </Container>
       
       
@@ -464,24 +508,25 @@ getGroupeMombeurs=(value)=>{
         </Form>
         <Footer >
         <FooterTab style={{backgroundColor:'white'}}>
-          
+          <Left>
+          <Button  iconLeft onPress={() => {this.setState({show:true})}}>
+            <Icon name="arrow-back" />
+            <Text>Précidents</Text>
+          </Button>
+          </Left>
           </FooterTab>
           <FooterTab style={{backgroundColor:'white'}}>
-          
+          <Right>
+          <Button  iconLeft onPress={() => {this.update()}}>
+            <Icon name="arrow-forward" />
+            <Text>Enregistrer</Text>
+          </Button>
+          </Right>
           </FooterTab>
           </Footer>
-         
+
         
       </Content>
-      <Fab position="bottomLeft" onPress={() => {this.setState({show:true})}}>
-      <Icon name="arrow-back" />
-
-
-      </Fab>
-      <Fab position="bottomRight" onPress={() => {this.save()}}>
-         <Icon name="paper-plane" />
-            
-          </Fab>
     </Container>
     </Container>
     </Container>
