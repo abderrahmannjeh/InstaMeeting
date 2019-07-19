@@ -57,12 +57,7 @@ export default class AddGroup extends Component {
 
        } 
 
-addNomber=()=>{
-    
 
-  
-  
-}
 
 saveGroupe=()=>{
     fetch('http://192.168.1.28:3000/groupe/',{
@@ -73,7 +68,8 @@ saveGroupe=()=>{
         },
         body:JSON.stringify({
             'owner':this.state.owner,
-            'memebers':this.state.selectMemeber
+            'nom':this.state.nom,
+            'description':this.state.description
         })
 
 
@@ -81,10 +77,12 @@ saveGroupe=()=>{
 
     }).then(response=> response.json())
       .then(response=>{
-
+        if(response.success==false)
         alert(response.message)
         if(response.success==true)
-        this.setState({groupeId:response.groupeId})
+        {
+          this.props.navigation.navigate('AddMember',{groupeId:response.groupeId})
+        }
 
 
 
@@ -117,60 +115,34 @@ saveGroupe=()=>{
             
           </Header>
          
-         <Container style={styles.container}>
+         <Container style={{margin:20}}>
          <Form style={{marginTop:50}}>
             <Item stackedLabel>
               <Label>Titre</Label>
-              <Input onChangeText={(text)=>this.setState({nom:text})}/>
+              <Input  multiline={true} onChangeText={(text)=>this.setState({nom:text})}/>
             </Item>
             <Item stackedLabel last>
               <Label>Description</Label>
-              <Input onChangeText={(text)=>this.setState({description:text})}/>
+              <Input numberOfLines={4} multiline={true} onChangeText={(text)=>this.setState({description:text})}/>
             </Item>
-            <Button block onPress={()=>{this.saveGroupe()}}>
-            <Text>Ajouter type</Text>
-          </Button>
+            
           </Form>
+          <Button style={{marginTop:20 }} block onPress={()=>{this.saveGroupe()}}>
+            <Text>Enregistrer</Text>
+          </Button>
 
 
 
 
          </Container>
          
-         <Container style={styles.container} >
-            <ScrollView>
-        <Form style={{marginTop:50}}>
-            <Item stackedLabel>
-              <Label>Memeber Email</Label>
-              <Input onChangeText={(text)=>this.setState({nvMemebr:{nom:this.state.nvMemebr.nom,email:text}})}/>
-            </Item>
-            <Item stackedLabel last>
-              <Label>Nom et Prenom</Label>
-              <Input onChangeText={(text)=>this.setState({nvMemebr:{email:this.state.nvMemebr.email,nom:text}})}/>
-            </Item>
-          </Form>
-        
-          <Button block onPress={()=>{this.addNomber()}}>
-            <Text>Ajouter Member</Text>
-          </Button>
-
-
-          <Table borderStyle={{borderWidth: 4, borderColor: '#c8e1ff'}} style={{marginTop:40,marginBottom:20}}>
-          <Row data={this.state.headers} style={style.head} textStyle={styles.text}/>
-          <Rows data={this.state.memebers} textStyle={style.text}/>
-        </Table>
-        <Button block onPress={()=>{this.saveGroupe()}}>
-            <Text>Enregistrer</Text>
-          </Button>
-       
+         
 
 
      
           
             
-          </ScrollView>
             
-        </Container>
         </Container>
       );
   

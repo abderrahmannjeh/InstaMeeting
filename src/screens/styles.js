@@ -5,7 +5,10 @@ const { StyleSheet } = React;
 export default {
   container: {
     
-    margin:5,
+     
+      justifyContent: 'center',
+      flex: 1
+    
     
   },
   text: {

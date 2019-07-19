@@ -9,19 +9,20 @@ import Aganda from './Aganda'
 import Register from './Register'
 import Home from './Home'
 import EditeReunion from './EditeReunion'
-
+import AddMemember from './AddMemebers'
 const stack=createStackNavigator(
   
     {
       LoginScreen:Login,
       Register:Register,
-      EditeReunion:EditeReunion
+      EditeReunion:EditeReunion,
+      AddMember:AddMemember
     
     
     
     },
     {headerMode: 'none',
-  navigationOptions: {
+    navigationOptions: {
     headerVisible: false,}
   }
     )
