@@ -17,7 +17,7 @@ import {
   Picker,
   Textarea,
   FooterTab,
-  Footer
+  Footer,Fab
 } from "native-base";
 import {StyleSheet} from 'react-native';
 import DatePicker from 'react-native-datepicker'
@@ -300,7 +300,7 @@ getGroupeMombeurs=(value)=>{
                </Item>
 
 
-              <Item stackedLabel style={{marginBottom:15}}>
+              <Item stackedLabel style={{marginBottom:10}}>
                 <Label>Titre:</Label>
                 <Input value={this.state.titre} style={{ borderColor: 'blue'}} onChangeText={(text)=>{this.state.titre=text}} />
               </Item>
@@ -344,31 +344,27 @@ getGroupeMombeurs=(value)=>{
 
                </Picker>
                </Item>
-            <Item stackedLabel style={{marginBottom:15}}>
+            <Item stackedLabel style={{marginBottom:10}}>
             <Label>Lieu :</Label>
             <Input  value={this.state.lieu}  onChangeText={(text)=>{this.setState({lieu:text})}} />
           </Item>
-            <Item stackedLabel>
+            <Item stackedLabel style={{marginBottom:10}}>
               <Label>Commentaire:</Label>
           <Input   value={this.state.commentaire}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
           </Item>
           </Form>
 
 
-          <Footer >
-          <FooterTab style={{backgroundColor:'white'}}>
-          <Right>
-          <Button  iconLeft onPress={() => {this.setState({show:false})}}>
-            <Icon name="arrow-forward" />
-            <Text>Suivant</Text>
-          </Button>
-          </Right>
-          </FooterTab>
-          </Footer>
+         
           
   
             
           </Content>
+          <Fab position="bottomRight" onPress={() => {this.setState({show:false})}}>
+      <Icon name="arrow-forward" />
+
+
+      </Fab>
         </Container>
         </Container>
       
@@ -401,7 +397,7 @@ getGroupeMombeurs=(value)=>{
       <Content>
         <Form>
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Date Prévue:</Label>
+            <Label style={{marginBottom:5}}>Date Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
                 date={this.state.date}
@@ -428,7 +424,7 @@ getGroupeMombeurs=(value)=>{
           </Item>
 
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Duré Prévue:</Label>
+            <Label style={{marginBottom:5}}>Duré Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
@@ -453,7 +449,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Heure Debut:</Label>
+            <Label style={{marginBottom:5}}>Heure Debut:</Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
@@ -479,7 +475,7 @@ getGroupeMombeurs=(value)=>{
           </Item>
 
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Heure Fin:     </Label>
+            <Label style={{marginBottom:5}}>Heure Fin:     </Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
@@ -506,27 +502,19 @@ getGroupeMombeurs=(value)=>{
           
           
         </Form>
-        <Footer >
-        <FooterTab style={{backgroundColor:'white'}}>
-          <Left>
-          <Button  iconLeft onPress={() => {this.setState({show:true})}}>
-            <Icon name="arrow-back" />
-            <Text>Précidents</Text>
-          </Button>
-          </Left>
-          </FooterTab>
-          <FooterTab style={{backgroundColor:'white'}}>
-          <Right>
-          <Button  iconLeft onPress={() => {this.update()}}>
-            <Icon name="arrow-forward" />
-            <Text>Enregistrer</Text>
-          </Button>
-          </Right>
-          </FooterTab>
-          </Footer>
+        
 
         
       </Content>
+      <Fab position="bottomLeft" onPress={() => {this.setState({show:true})}}>
+      <Icon name="arrow-back" />
+
+
+      </Fab>
+      <Fab position="bottomRight" onPress={() => {this.update()}}>
+         <Icon name="paper-plane" />
+            
+          </Fab>
     </Container>
     </Container>
     </Container>

@@ -3,7 +3,7 @@ import {
     Container,
     Header,
     Title,
-    Button,
+    TouchableOpacity,
     Item,
     Label,
     Input,
@@ -12,13 +12,16 @@ import {
     Icon,
     Form,
     Text,
-    List, ListItem, Thumbnail,Right
+    List, ListItem,Right,Fab
 
   } from "native-base";
-  import {StyleSheet} from 'react-native'
+  import { Button } from 'react-native-elements';
+
+  import {StyleSheet,View} from 'react-native'
   import { Table, Row, Rows } from 'react-native-table-component';
   import AsyncStorage from '@react-native-community/async-storage';
-
+  import Modal from "react-native-modal";
+  import ModalWrapper from 'react-native-modal-wrapper'
 import styles from "./styles";
 
 
@@ -26,17 +29,21 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default class AddMemeber extends Component {
-
+  static navigationOptions = {
+    mode: 'modal'
+  };
         state={
             email:'',
             memebers:[],
             selectMemeber:[],
-            nvMemebr:{email:'',nom:''},
+            nvEmail:'',
+            nvNom:'',
             
             headers:['email ','nom'],
             nom:'',
             description:'',
-            groupeId:0
+            groupeId:0,
+            visible:false
 
 
         }
@@ -52,6 +59,7 @@ export default class AddMemeber extends Component {
          }
 
 addNomber=()=>{
+  
   fetch("http://192.168.1.28:3000/groupe/addMemberGroupe",{
     method:"POST",
     headers:{
@@ -60,8 +68,8 @@ addNomber=()=>{
   },
   body:JSON.stringify({
     "groupeId":this.state.groupeId,
-    "email":this.state.nvMemebr.email,
-    "nom":this.state.nvMemebr.nom
+    "email":this.state.nvEmail,
+    "nom":this.state.nvNom
 
 
 
@@ -70,21 +78,21 @@ addNomber=()=>{
 
   }).then(response=>response.json())
     .then(response=>{
-        if(response.success==false)
-          alert(response.message)
-          else
+      //  if(response.success==false)
+        //  alert(response.message)
+        //  else
           {
             var tab=this.state.memebers
             console.log(tab)
 
-            tab.push({"email":this.state.nvMemebr.email,"nom":this.state.nvMemebr.nom})
+            tab.push({"email":this.state.nvEmail,"nom":this.state.nvNom})
             console.log(tab)
 
             
             this.setState({memebers:tab});
             
-            this.setState({nvMemebr:{email:'',nom:''}})
-            console.log(this.state.memebers)
+            this.setState({nvEmail:'',nvNom:''})
+            this.setState({visible:false})
           }
 
           
@@ -110,11 +118,11 @@ delete=(email,index)=>{
     }).then(response=>response.json())
       .then(response=>{
 
-        if(response.success==false)
-            alert(response.message)
-        else
+        //if(response.success==false)
+        //    alert(response.message)
+       // else
         
-        this.setState({memebers:this.state.memebers.splice(index,1)})
+        this.setState({memebers:this.state.memebers.splice(1,index)})
 
       })
 
@@ -129,39 +137,62 @@ delete=(email,index)=>{
         <Container>
           <Header>
             <Left>
-              <Button transparent onPress={() => this.props.navigation.openDrawer()}>
-                <Icon name="menu" />
-              </Button>
+              
+                <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
            
             </Left>
             
 
             
             <Body>
-              <Title>Ajout Memebers</Title>
+              <Title>Membres</Title>
             </Body>
+            
 
             
           </Header>
-         
-         
-         
-         <Container style={styles.container} >
-            <ScrollView>
-        <Form style={{marginTop:50}}>
+          <ModalWrapper
+          onRequestClose={this.onCancel}
+        style={{ width: 280, height: 300, paddingLeft: 24, paddingRight: 24 }}
+        visible={this.state.visible}>
+            <View>
+          <Form style={{marginTop:10}}>
             <Item stackedLabel>
               <Label>Memeber Email</Label>
-              <Input value={this.state.nvMemebr.email} onChangeText={(text)=>this.setState({nvMemebr:{nom:this.state.nvMemebr.nom,email:text}})}/>
+              <Input value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
             </Item>
             <Item stackedLabel last>
               <Label>Nom et Prenom</Label>
-              <Input  value={this.state.nvMemebr.nom}  onChangeText={(text)=>this.setState({nvMemebr:{email:this.state.nvMemebr.email,nom:text}})}/>
+              <Input  value={this.state.nvNom}  onChangeText={(text)=>this.setState({nvNom:text})}/>
             </Item>
           </Form>
         
-          <Button block onPress={()=>{this.addNomber()}}>
-            <Text>Ajouter Member</Text>
-          </Button>
+          <View style={ {
+              flexDirection: 'row',
+              alignItems: 'center',
+               justifyContent: 'center',
+              }}>
+            <Button
+              buttonStyle={{width:100, margin:15}}
+              onPress={() => this.addNomber()}
+              title="ajouter"
+            />
+            <Button
+              buttonStyle={{width:100,margin:15}}
+              onPress={() => {this.setState({visible:false})}}
+              title="anuller"
+              
+              backgroundColor="#D55E2A"
+            /></View>
+          </View>
+        </ModalWrapper>
+         
+         
+         <Container style={styles.container} >
+       
+        
+            <ScrollView>
+        
 
           <List>
             {this.state.memebers.map((item,index)=>{ 
@@ -172,9 +203,7 @@ delete=(email,index)=>{
                 <Text note numberOfLines={1}>{item.email}</Text>
               </Body>
               <Right>
-                <Button transparent onPress={()=>{this.delete(item.email,index)}}>
-                  <Text style={{color: 'red'}} >Remove</Text>
-                </Button>
+                  <Text  onPress={()=>{this.delete(item.email,index)}} style={{color: 'red'}} >Remove</Text>
               </Right>
             </ListItem>)})}
           </List>
@@ -186,7 +215,10 @@ delete=(email,index)=>{
           
             
           </ScrollView>
-            
+          <Fab direction="right" position="bottomRight"
+          onPress={() => {this.setState({visible:true})}}>
+              <Icon name='add'></Icon>
+          </Fab>
         </Container>
         </Container>
       );

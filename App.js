@@ -18,7 +18,8 @@ const AppNavigator=createStackNavigator(
 },
 {
   initialRouteName: 'Auth',
-  headerMode:'none'
+  headerMode:'none',
+  
   
 
 }

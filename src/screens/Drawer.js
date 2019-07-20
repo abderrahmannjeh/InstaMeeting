@@ -22,6 +22,7 @@ const stack=createStackNavigator(
     
     },
     {headerMode: 'none',
+    
     navigationOptions: {
     headerVisible: false,}
   }

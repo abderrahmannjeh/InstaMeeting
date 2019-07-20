@@ -81,6 +81,7 @@ saveGroupe=()=>{
         alert(response.message)
         if(response.success==true)
         {
+          this.setState({nom:'',description:''})
           this.props.navigation.navigate('AddMember',{groupeId:response.groupeId})
         }
 
@@ -123,7 +124,7 @@ saveGroupe=()=>{
             </Item>
             <Item stackedLabel last>
               <Label>Description</Label>
-              <Input numberOfLines={4} multiline={true} onChangeText={(text)=>this.setState({description:text})}/>
+              <Input  onChangeText={(text)=>this.setState({description:text})}/>
             </Item>
             
           </Form>

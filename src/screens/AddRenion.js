@@ -357,7 +357,7 @@ getGroupeMombeurs=(value)=>{
       <Content>
         <Form>
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Date Prévue:</Label>
+            <Label style={{marginBottom:5}}>Date Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
                 date={this.state.date}
@@ -384,7 +384,7 @@ getGroupeMombeurs=(value)=>{
           </Item>
 
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Duré Prévue:</Label>
+            <Label style={{marginBottom:5}}>Duré Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
@@ -409,7 +409,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Heure Debut:</Label>
+            <Label style={{marginBottom:5}}>Heure Debut:</Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
@@ -435,7 +435,7 @@ getGroupeMombeurs=(value)=>{
           </Item>
 
           <Item stackedLabel style={{marginBottom:15}}>
-            <Label>Heure Fin:     </Label>
+            <Label style={{marginBottom:5}}>Heure Fin:     </Label>
             <DatePicker
                 style={{width: 250}}
                 mode="time"
