@@ -20,7 +20,7 @@ import {
   Footer,
   Fab
 } from "native-base";
-import {StyleSheet} from 'react-native';
+import {StyleSheet,View} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import RNCalendarEvents from 'react-native-calendar-events';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -57,7 +57,7 @@ save=()=>{
 
 
 
-fetch('http://192.168.1.28:3000/reunion/',{
+fetch('http://192.168.137.15:3000/reunion/',{
 
   method:'POST',
   headers:{
@@ -165,7 +165,7 @@ this.getGroupeMombeurs(value);
 
 getGroupeList=()=>{
   
-  fetch("http://192.168.1.28:3000/groupe/getList",{
+  fetch("http://192.168.137.15:3000/groupe/getList",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -188,7 +188,7 @@ getGroupeList=()=>{
 
 }
 getGroupeMombeurs=(value)=>{
-  fetch("http://192.168.1.28:3000/groupe/getGroupeMemebers",{
+  fetch("http://192.168.137.15:3000/groupe/getGroupeMemebers",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -234,8 +234,9 @@ getGroupeMombeurs=(value)=>{
          <Container  >
           <Content>
             <Form>
-                <Item>
-                <Label >Groupe :</Label>
+            <Item stackedLabel style={{marginBottom:10 ,  borderColor: 'transparent'}} >
+                <Label style={{marginBottom:5}}  >Groupe :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
                 <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
@@ -248,19 +249,22 @@ getGroupeMombeurs=(value)=>{
                 >
                  {this.state.groupes.map((data, key)=>(
                    
-                   <Picker.Item label={(data.id).toString()} value={data.id} key={key} />)
+                   <Picker.Item label={(data.id).toString()} value={data.name} key={key} />)
                    )}
 
                </Picker>
+               </View>
                </Item>
 
 
-              <Item stackedLabel style={{marginBottom:10}}>
-                <Label>Titre:</Label>
-                <Input value={this.state.titre} style={{ borderColor: 'blue'}} onChangeText={(text)=>{this.setState({titre:text})}} />
+               <Item stackedLabel  style={{marginBottom:5 ,borderColor: 'transparent'}} >
+              <Label style={{marginBottom:5}}>Titre:</Label>
+                <Input  value={this.state.titre} style={{ marginLeft:'5%',borderWidth: 1, borderRadius: 5 ,width:'90%'}} onChangeText={(text)=>{this.setState({titre:text})}} />
               </Item>
-              <Item>
-              <Label>Resp PV:</Label>
+              
+              <Item stackedLabel style={{marginBottom:7 ,  borderColor: 'transparent'}} >
+                <Label style={{marginBottom:5}}  >Resp Pv :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
               <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
@@ -278,9 +282,11 @@ getGroupeMombeurs=(value)=>{
                    )}
 
                </Picker>
+               </View>
                </Item>
-              <Item >
-              <Label  >Res Verif:</Label>
+               <Item stackedLabel style={{marginBottom:7 ,  borderColor: 'transparent'}} >
+                <Label style={{marginBottom:5}}  >Resp Verif :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
               <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
@@ -298,30 +304,27 @@ getGroupeMombeurs=(value)=>{
                    )}
 
                </Picker>
+               </View>
                </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
-            <Label>Lieu :</Label>
-            <Input  value={this.state.lieu}  onChangeText={(text)=>{this.setState({lieu:text})}} />
+               <Item stackedLabel  style={{marginBottom:7 ,borderColor: 'transparent'}} >
+              <Label style={{marginBottom:5}}>Lieu :</Label>
+            <Input  value={this.state.lieu}  style={{ borderWidth: 1, borderRadius: 5 ,padding:2,width:'90%',marginLeft:'5%'}} onChangeText={(text)=>{this.setState({lieu:text})}} />
           </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
-              <Label>Commentaire:</Label>
-          <Input   value={this.state.commentaire}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
+          <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}} >
+              <Label style={{marginBottom:5}}>Commentaire:</Label>
+              <Textarea rowSpan={2} style={{ borderWidth: 1, borderRadius: 5, width:'90%'}}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
           </Item>
           </Form>
 
 
-          <Footer >
-          <FooterTab style={{backgroundColor:'white'}}>
           
-          </FooterTab>
-          </Footer>
          
   
             
           </Content>
           
         </Container>
-        <Fab position="bottomRight" onPress={() => {this.setState({show:false})}}
+        <Fab style={{marginTop:10}} position="bottomRight" onPress={() => {this.setState({show:false})}}
         
         >
             <Icon name="arrow-forward" />
@@ -353,10 +356,10 @@ getGroupeMombeurs=(value)=>{
         <Right />
       </Header>
       <Container >
-     <Container  >
+     <Container style={{marginTop:'30%'}} >
       <Content>
         <Form>
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Date Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -383,7 +386,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
 
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Duré Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -408,7 +411,7 @@ getGroupeMombeurs=(value)=>{
                 onDateChange={(date) => {this.setState({duree:date})}}
             />
           </Item>
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Heure Debut:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -434,7 +437,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
 
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Heure Fin:     </Label>
             <DatePicker
                 style={{width: 250}}

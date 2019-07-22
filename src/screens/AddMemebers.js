@@ -12,12 +12,12 @@ import {
     Icon,
     Form,
     Text,
-    List, ListItem,Right,Fab
+    List, Thumbnail,Right,Fab,SwipeRow,Content,
 
   } from "native-base";
   import { Button } from 'react-native-elements';
 
-  import {StyleSheet,View} from 'react-native'
+  import {StyleSheet,View,Image} from 'react-native'
   import { Table, Row, Rows } from 'react-native-table-component';
   import AsyncStorage from '@react-native-community/async-storage';
   import Modal from "react-native-modal";
@@ -60,7 +60,7 @@ export default class AddMemeber extends Component {
 
 addNomber=()=>{
   
-  fetch("http://192.168.1.28:3000/groupe/addMemberGroupe",{
+  fetch("http://192.168.137.15:3000/groupe/addMemberGroupe",{
     method:"POST",
     headers:{
       Accept: 'application/json',
@@ -103,7 +103,7 @@ addNomber=()=>{
 
 delete=(email,index)=>{
 
-    fetch("http://192.168.1.28:3000/groupe/deleteMemeber",{
+    fetch("http://192.168.137.15:3000/groupe/deleteMemeber",{
     method:"POST",
     headers:{
         Accept: 'application/json',
@@ -153,17 +153,17 @@ delete=(email,index)=>{
           </Header>
           <ModalWrapper
           onRequestClose={this.onCancel}
-        style={{ width: 280, height: 300, paddingLeft: 24, paddingRight: 24 }}
+        style={{ width: '90%', height: '90%', paddingLeft: 24, paddingRight: 24 }}
         visible={this.state.visible}>
             <View>
           <Form style={{marginTop:10}}>
-            <Item stackedLabel>
-              <Label>Memeber Email</Label>
-              <Input value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
+            <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}}>
+              <Label style={{marginBottom:5}}>Memeber Email</Label>
+              <Input style={{ borderWidth: 1, borderRadius: 5, width:'100%',padding:2}} value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
             </Item>
-            <Item stackedLabel last>
-              <Label>Nom et Prenom</Label>
-              <Input  value={this.state.nvNom}  onChangeText={(text)=>this.setState({nvNom:text})}/>
+            <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}}>
+              <Label style={{marginBottom:5}}>Nom et Prenom</Label>
+              <Input style={{ borderWidth: 1, borderRadius: 5, width:'100%',padding:2}} value={this.state.nvNom}  onChangeText={(text)=>this.setState({nvNom:text})}/>
             </Item>
           </Form>
         
@@ -194,19 +194,34 @@ delete=(email,index)=>{
             <ScrollView>
         
 
-          <List>
+            <Content scrollEnabled={false}>
             {this.state.memebers.map((item,index)=>{ 
-            return(<ListItem thumbnail key={index}>
+            return(<SwipeRow 
+              leftOpenValue={75}
               
-              <Body>
-                <Text>{item.nom}</Text>
-                <Text note numberOfLines={1}>{item.email}</Text>
-              </Body>
-              <Right>
-                  <Text  onPress={()=>{this.delete(item.email,index)}} style={{color: 'red'}} >Remove</Text>
-              </Right>
-            </ListItem>)})}
-          </List>
+              left={
+                  <Text onPress={() => this.delete(item.email,index)} style={{color:'red'}}>Remove</Text>
+              }
+              body={
+                <View  >
+
+                <Left>
+                  <View style={ {
+                  flexDirection: 'row'}}>
+                <Image style={{width: 50, height: 50 ,marginRight:15}} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYneVYYk4yVnFM6LX-HaU9_ng5ItncuzzjXCEW0l4aBkYs5Yhp'}} />
+                <View style={ {
+                  flexDirection: 'column'}}>
+                <Text>Nom:   {item.nom}</Text>
+                <Text note >Email :{item.email}</Text>
+                </View>
+                </View>
+                </Left>
+                </View>
+                
+              }
+             
+            />)})}
+          </Content>
       
        
 
@@ -215,9 +230,13 @@ delete=(email,index)=>{
           
             
           </ScrollView>
-          <Fab direction="right" position="bottomRight"
+          <Fab direction="right" position="bottomLeft"
           onPress={() => {this.setState({visible:true})}}>
               <Icon name='add'></Icon>
+          </Fab>
+          <Fab direction="right" position="bottomRight"
+          onPress={() => {this.props.navigation.navigate('Points',{groupeId:this.state.groupeId})}}>
+              <Icon name='arrow-forward'></Icon>
           </Fab>
         </Container>
         </Container>

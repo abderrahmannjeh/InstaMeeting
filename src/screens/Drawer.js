@@ -10,13 +10,15 @@ import Register from './Register'
 import Home from './Home'
 import EditeReunion from './EditeReunion'
 import AddMemember from './AddMemebers'
+import AddDiscution from './AddPointsDescution'
 const stack=createStackNavigator(
   
     {
       LoginScreen:Login,
       Register:Register,
       EditeReunion:EditeReunion,
-      AddMember:AddMemember
+      AddMember:AddMemember,
+      Points:AddDiscution
     
     
     
@@ -36,7 +38,7 @@ const AppNavigator = createDrawerNavigator(
       
       
       
-      AddGroupe,
+      AddGroupe:AddGroupe,
       Aganda,
       AddReunion,
       

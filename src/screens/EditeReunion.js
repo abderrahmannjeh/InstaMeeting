@@ -60,7 +60,7 @@ update=()=>{
 
 
 
-  fetch('http://192.168.1.28:3000/reunion/update',{
+  fetch('http://192.168.137.15:3000/reunion/update',{
   
     method:'POST',
     headers:{
@@ -136,7 +136,7 @@ didBlurSubscription = this.props.navigation.addListener(
       this.setState({id:id})
     this.setState({operation:2})
       
-      fetch('http://192.168.1.28:3000/Reunion/getById',{
+      fetch('http://192.168.137.15:3000/Reunion/getById',{
         method:'POST',
         headers:{
           Accept: 'application/json',
@@ -210,7 +210,7 @@ this.getGroupeMombeurs(value);
 
 getGroupeList=()=>{
   
-  fetch("http://192.168.1.28:3000/groupe/getList",{
+  fetch("http://192.168.137.15:3000/groupe/getList",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -233,7 +233,7 @@ getGroupeList=()=>{
 
 }
 getGroupeMombeurs=(value)=>{
-  fetch("http://192.168.1.28:3000/groupe/getGroupeMemebers",{
+  fetch("http://192.168.137.15:3000/groupe/getGroupeMemebers",{
     method:'POST',
     headers:{
       Accept: 'application/json',

@@ -52,7 +52,7 @@ export default class ExpandableCalendarScreen extends Component {
      }
      getListReunion=(date)=>{
    
-       fetch("http://192.168.1.28:3000/Reunion/getUtilisateurRenion",{
+       fetch("http://192.168.137.15:3000/Reunion/getUtilisateurRenion",{
          method:'POST',
          headers:{
            Accept: 'application/json',

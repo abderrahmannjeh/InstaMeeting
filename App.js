@@ -56,10 +56,12 @@ export default class App extends Component {
     
   render() {
     if (this.state.isLoading) {
-      return(<View style={{      
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',margin:200}}><Spinner color='bleu' /></View>)
+      return(<View  style={ {
+        flexDirection: 'row',
+        alignItems: 'center',
+         justifyContent: 'center',
+         marginTop:'50%'
+        }}><Spinner color='bleu' /></View>)
     }
     else
     return(

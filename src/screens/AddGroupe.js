@@ -3,7 +3,7 @@ import {
     Container,
     Header,
     Title,
-    Button,
+    
     Item,
     Label,
     Input,
@@ -12,10 +12,10 @@ import {
     Icon,
     Form,
     Text,
-
+    Textarea 
   } from "native-base";
-  import {StyleSheet} from 'react-native'
-  import { Table, Row, Rows } from 'react-native-table-component';
+  import{ Button} from "react-native-elements"
+  import {StyleSheet , View} from 'react-native'
   import AsyncStorage from '@react-native-community/async-storage';
 
 import styles from "./styles";
@@ -60,7 +60,7 @@ export default class AddGroup extends Component {
 
 
 saveGroupe=()=>{
-    fetch('http://192.168.1.28:3000/groupe/',{
+    fetch('http://192.168.137.15:3000/groupe/',{
         method:'POST',
         headers:{
             Accept: 'application/json',
@@ -81,7 +81,8 @@ saveGroupe=()=>{
         alert(response.message)
         if(response.success==true)
         {
-          this.setState({nom:'',description:''})
+          this.setState({nom:''})
+          this.setState({description:''})
           this.props.navigation.navigate('AddMember',{groupeId:response.groupeId})
         }
 
@@ -101,9 +102,7 @@ saveGroupe=()=>{
         <Container>
           <Header>
             <Left>
-              <Button transparent onPress={() => this.props.navigation.openDrawer()}>
-                <Icon name="menu" />
-              </Button>
+                <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
            
             </Left>
             
@@ -116,21 +115,32 @@ saveGroupe=()=>{
             
           </Header>
          
-         <Container style={{margin:20}}>
+         <Container style={{alignItems: 'center',
+               justifyContent: 'center'}}>
          <Form style={{marginTop:50}}>
-            <Item stackedLabel>
-              <Label>Titre</Label>
-              <Input  multiline={true} onChangeText={(text)=>this.setState({nom:text})}/>
+         <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}} >
+              <Label style={{marginBottom:5}}>Titre</Label>
+              <Input style={{ borderWidth: 1, borderRadius: 5 ,padding:2}}  onChangeText={(text)=>this.setState({nom:text})}/>
             </Item>
-            <Item stackedLabel last>
-              <Label>Description</Label>
-              <Input  onChangeText={(text)=>this.setState({description:text})}/>
+            <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}} >
+              <Label style={{marginBottom:5}}>Description</Label>
+              <Textarea rowSpan={5} style={{ borderWidth: 1, borderRadius: 5, width:300}}  onChangeText={(text)=>this.setState({description:text})}/>
             </Item>
             
           </Form>
-          <Button style={{marginTop:20 }} block onPress={()=>{this.saveGroupe()}}>
-            <Text>Enregistrer</Text>
-          </Button>
+          <View style={ {
+              flexDirection: 'row',
+              alignItems: 'center',
+               justifyContent: 'center',
+              }}>
+          <Button
+              buttonStyle={{width:100 , margin:20}}
+              onPress={() => {this.saveGroupe()}}
+              title="créer"
+              
+              backgroundColor="#D55E2A"
+            />
+            </View>
 
 
 
