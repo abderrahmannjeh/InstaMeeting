@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 import styles from "./styles";
-import {Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView,StyleSheet,ToastAndroid} from 'react-native';
+import { Text, View, TextInput} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -67,7 +67,7 @@ _storeData =async (response)=>{
 Login=()=>{
   if(this.state.change==true && this.state.emailEr==false && this.state.PasswordEr==false)
 
-{fetch('http://192.168.137.15:3000/users',{
+{fetch('http://192.168.1.28:3000/users',{
 
 method:'POST',
 headers:{

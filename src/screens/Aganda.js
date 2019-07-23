@@ -6,11 +6,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {
  
   StyleSheet,
+  View
  
 } from 'react-native';
 import {ExpandableCalendar,  CalendarProvider} from 'react-native-calendars';
 import WeekView  from 'react-native-week-view';
-import { Icon,Fab, Container,Header,Left,Body,Title,Button,Right } from 'native-base';
+import { Icon,Fab, Container,Header,Left,Body,Title,Button,Right,Spinner } from 'native-base';
 
 
 
@@ -23,8 +24,10 @@ export default class ExpandableCalendarScreen extends Component {
     email:'',
     events :[],
     selecteedDate:new Date(),
-    dates:new Date()
+    dates:new Date(),
+    isLoading:true
   }
+  
   constructor(props)
   {
     super(props);
@@ -52,7 +55,7 @@ export default class ExpandableCalendarScreen extends Component {
      }
      getListReunion=(date)=>{
    
-       fetch("http://192.168.137.15:3000/Reunion/getUtilisateurRenion",{
+       fetch("http://192.168.1.28:3000/Reunion/getUtilisateurRenion",{
          method:'POST',
          headers:{
            Accept: 'application/json',
@@ -117,9 +120,11 @@ export default class ExpandableCalendarScreen extends Component {
 
 
 
-  render() {    
+  render() { 
+   
     return (
       <Container>
+        
  <Header>
           <Left>
             <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
@@ -149,8 +154,6 @@ export default class ExpandableCalendarScreen extends Component {
           // initialPosition={'open'} // ExpandableCalendar.positions.OPEN - can't find static positions
           firstDay={1}
            // {'2019-06-01': {marked: true}, '2019-06-02': {marked: true}, '2019-06-03': {marked: true}};
-          leftArrowImageSource={require('../img/previous.png')}
-          rightArrowImageSource={require('../img/next.png')}
           // calendarStyle={styles.calendar}
           // headerStyle={styles.calendar} // for horizontal only
         />
@@ -158,7 +161,7 @@ export default class ExpandableCalendarScreen extends Component {
        selectedDate={this.state.dates}
        numberOfDays={1}
        events={this.state.events}
-       onEventPress={(event) => this.props.navigation.navigate('EditeReunion',{'id':event.id})}
+       onEventPress={(event) => this.props.navigation.navigate('EditeReunio',{'id':event.id})}
        headerStyle={styles.headerStyle}
        formatDateHeader="MMM D"
        locale="fr"
@@ -166,7 +169,7 @@ export default class ExpandableCalendarScreen extends Component {
 
         />
         <Fab direction="right" position="bottomRight"
-          onPress={() => {this.props.navigation.navigate('AddReunion')}}>
+          onPress={() => {this.props.navigation.navigate('AddReunio')}}>
               <Icon name='add'></Icon>
           </Fab>
       </CalendarProvider>

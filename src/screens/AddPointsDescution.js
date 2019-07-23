@@ -20,7 +20,7 @@ import {
 
   import { Button } from 'react-native-elements';
 
-  import {StyleSheet,View,Image,KeyboardAvoidingView,Dimensions} from 'react-native'
+  import {StyleSheet,View,Image} from 'react-native'
   import { Table, Row, Rows } from 'react-native-table-component';
   import AsyncStorage from '@react-native-community/async-storage';
   import Modal from "react-native-modal";
@@ -56,16 +56,34 @@ export default class AddMemeber extends Component {
        constructor(props)
        {
         super(props)
-         } 
-         componentDidMount()
-         {id=this.props.navigation.state.params.groupeId;
-         this.setState({groupeId:id})
-         this.getGroupeMombeurs(id)
+        this.init()
+        
+
+      } 
+        
+         async init()
+         {
+          await this.GetGroupeId()
+          this.getGroupeMombeurs(this.state.groupeId)
+
          }
+
+         async GetGroupeId() {
+          try {
+              const groupeId= await AsyncStorage.getItem('groupeId');
+              
+              this.setState({groupeId:groupeId});
+              
+          }
+          catch (error) {
+              // Manage error handling
+              alert("eeruu")
+          }
+        }        
 
 addDiscution=()=>{
   
-  fetch("http://192.168.137.15:3000/discution/add",{
+  fetch("http://192.168.1.28:3000/discution/add",{
     method:"POST",
     headers:{
       Accept: 'application/json',
@@ -117,7 +135,7 @@ addDiscution=()=>{
 
 
 getGroupeMombeurs=(value)=>{
-  fetch("http://192.168.137.15:3000/groupe/getGroupeMemebers",{
+  fetch("http://192.168.1.28:3000/groupe/getGroupeMemebers",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -131,8 +149,6 @@ getGroupeMombeurs=(value)=>{
   }).then(response=>response.json())
     .then(response=>{
       this.setState({memebers:response.data})
-      
-  
   
     })
 
@@ -142,7 +158,7 @@ getGroupeMombeurs=(value)=>{
 
 delete=(email,index)=>{
 
-    fetch("http://192.168.137.15:3000/groupe/deleteMemeber",{
+    fetch("http://192.168.1.28:3000/groupe/deleteMemeber",{
     method:"POST",
     headers:{
         Accept: 'application/json',
@@ -181,21 +197,24 @@ delete=(email,index)=>{
            
             </Left>
             
+            
 
             
             <Body>
               <Title>Discutions</Title>
             </Body>
+            <Right>
+            
+              <Icon name='add' onPress={() => {this.setState({visible:true})}}></Icon>
+            </Right>
             
 
             
           </Header>
-          <KeyboardAvoidingView  behavior={'position'}>
-
+          
           <ModalWrapper
           onRequestClose={this.onCancel}
-        style={{ height: Dimensions.get('window').height ,
-        width: Dimensions.get('window').width}}
+        style={{ width: '90%', height: '90%', paddingLeft: 24, paddingRight: 24 }}
         visible={this.state.visible}>
             <View>
           <Form >
@@ -225,32 +244,12 @@ delete=(email,index)=>{
                 >
                  {this.state.memebers.map((data, key)=>(
                    
-                   <Picker.Item label={(data.nom).toString()} value={data.email} key={key} />)
+                   <Picker.Item label={(data.email).toString()} value={data.email} key={key} />)
                    )}
 
                </Picker>
                </View>
-               <Item stackedLabel style={{  borderColor: 'transparent'}} >
-              <Label style={{marginBottom:5}}>Durée</Label>
-
-              <DatePicker
-                style={{width: 240}}
-                mode="time"
-                date={this.state.heure}
-                placeholder="select date"
-                
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                
-                dateInput: {
-                    marginLeft: 20
-                }
-                // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(date) => {this.setState({heure:date})}}
-            />
-            </Item>
+               
                
                </Item>
                
@@ -276,7 +275,6 @@ delete=(email,index)=>{
             /></View>
           </View>
         </ModalWrapper>
-        </KeyboardAvoidingView>
          
          
          <Container style={styles.container} >
@@ -321,10 +319,7 @@ delete=(email,index)=>{
           
             
           </ScrollView>
-          <Fab direction="right" position="bottomRight"
-          onPress={() => {this.setState({visible:true})}}>
-              <Icon name='add'></Icon>
-          </Fab>
+          
         </Container>
         </Container>
       );

@@ -15,13 +15,9 @@ import {
     List, Thumbnail,Right,Fab,SwipeRow,Content,
 
   } from "native-base";
-  import { Button } from 'react-native-elements';
 
-  import {StyleSheet,View,Image} from 'react-native'
-  import { Table, Row, Rows } from 'react-native-table-component';
+  import {StyleSheet,View,Image,Dimensions} from 'react-native'
   import AsyncStorage from '@react-native-community/async-storage';
-  import Modal from "react-native-modal";
-  import ModalWrapper from 'react-native-modal-wrapper'
 import styles from "./styles";
 
 
@@ -29,9 +25,7 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default class AddMemeber extends Component {
-  static navigationOptions = {
-    mode: 'modal'
-  };
+  
         state={
             email:'',
             memebers:[],
@@ -52,15 +46,33 @@ export default class AddMemeber extends Component {
        constructor(props)
        {
         super(props)
-         } 
-         componentDidMount()
-         {id=this.props.navigation.state.params.groupeId;
-         this.setState({groupeId:id})
+        this.init()
+        } 
+        
+
+
+
+         async init()
+         {
+          await this.GetGroupeId()
          }
+
+         async GetGroupeId() {
+          try {
+              const groupeId= await AsyncStorage.getItem('groupeId');
+              alert(groupeId)
+              this.setState({groupeId:groupeId});
+              
+          }
+          catch (error) {
+              // Manage error handling
+              alert("eeruu")
+          }
+        }        
 
 addNomber=()=>{
   
-  fetch("http://192.168.137.15:3000/groupe/addMemberGroupe",{
+  fetch("http://192.168.1.28:3000/groupe/addMemberGroupe",{
     method:"POST",
     headers:{
       Accept: 'application/json',
@@ -83,10 +95,8 @@ addNomber=()=>{
         //  else
           {
             var tab=this.state.memebers
-            console.log(tab)
 
             tab.push({"email":this.state.nvEmail,"nom":this.state.nvNom})
-            console.log(tab)
 
             
             this.setState({memebers:tab});
@@ -103,7 +113,7 @@ addNomber=()=>{
 
 delete=(email,index)=>{
 
-    fetch("http://192.168.137.15:3000/groupe/deleteMemeber",{
+    fetch("http://192.168.1.28:3000/groupe/deleteMemeber",{
     method:"POST",
     headers:{
         Accept: 'application/json',
@@ -122,7 +132,7 @@ delete=(email,index)=>{
         //    alert(response.message)
        // else
         
-        this.setState({memebers:this.state.memebers.splice(1,index)})
+        this.setState({memebers:this.state.memebers.splice(index,1)})
 
       })
 
@@ -138,7 +148,7 @@ delete=(email,index)=>{
           <Header>
             <Left>
               
-                <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
+                <Icon name="menu" onPress={() => this.props.nav.openDrawer()} />
            
             </Left>
             
@@ -151,45 +161,30 @@ delete=(email,index)=>{
 
             
           </Header>
-          <ModalWrapper
-          onRequestClose={this.onCancel}
-        style={{ width: '90%', height: '90%', paddingLeft: 24, paddingRight: 24 }}
-        visible={this.state.visible}>
-            <View>
-          <Form style={{marginTop:10}}>
-            <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}}>
-              <Label style={{marginBottom:5}}>Memeber Email</Label>
-              <Input style={{ borderWidth: 1, borderRadius: 5, width:'100%',padding:2}} value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
-            </Item>
-            <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}}>
-              <Label style={{marginBottom:5}}>Nom et Prenom</Label>
-              <Input style={{ borderWidth: 1, borderRadius: 5, width:'100%',padding:2}} value={this.state.nvNom}  onChangeText={(text)=>this.setState({nvNom:text})}/>
-            </Item>
-          </Form>
-        
-          <View style={ {
+         
+         
+         
+         
+         <Container style={styles.container} >
+         <View style={ {
               flexDirection: 'row',
               alignItems: 'center',
                justifyContent: 'center',
               }}>
-            <Button
-              buttonStyle={{width:100, margin:15}}
-              onPress={() => this.addNomber()}
-              title="ajouter"
+         <Item stackedLabel  style={{borderColor: 'transparent'}}>
+              <Label style={{marginBottom:5}}> Email</Label>
+              <Input style={{ borderWidth: 1, borderRadius: 5,padding:2}} width={Dimensions.get('window').width*0.8} value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
+            </Item>
+        
+          
+            
+            <Icon
+            name="add"
+            onPress={() => this.addNomber()}
+              style={{marginTop:Dimensions.get('window').width*0.1,marginLeft:Dimensions.get('window').width*0.05}}
             />
-            <Button
-              buttonStyle={{width:100,margin:15}}
-              onPress={() => {this.setState({visible:false})}}
-              title="anuller"
-              
-              backgroundColor="#D55E2A"
-            /></View>
-          </View>
-        </ModalWrapper>
-         
-         
-         <Container style={styles.container} >
-       
+            
+            </View>
         
             <ScrollView>
         
@@ -211,8 +206,7 @@ delete=(email,index)=>{
                 <Image style={{width: 50, height: 50 ,marginRight:15}} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYneVYYk4yVnFM6LX-HaU9_ng5ItncuzzjXCEW0l4aBkYs5Yhp'}} />
                 <View style={ {
                   flexDirection: 'column'}}>
-                <Text>Nom:   {item.nom}</Text>
-                <Text note >Email :{item.email}</Text>
+                <Text >{item.email}</Text>
                 </View>
                 </View>
                 </Left>
@@ -230,14 +224,8 @@ delete=(email,index)=>{
           
             
           </ScrollView>
-          <Fab direction="right" position="bottomLeft"
-          onPress={() => {this.setState({visible:true})}}>
-              <Icon name='add'></Icon>
-          </Fab>
-          <Fab direction="right" position="bottomRight"
-          onPress={() => {this.props.navigation.navigate('Points',{groupeId:this.state.groupeId})}}>
-              <Icon name='arrow-forward'></Icon>
-          </Fab>
+          
+         
         </Container>
         </Container>
       );

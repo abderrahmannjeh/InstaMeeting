@@ -57,10 +57,20 @@ export default class AddGroup extends Component {
 
        } 
 
+       _storeData =async (groupeId)=>{
+        try{
+          
+          await AsyncStorage.setItem('groupeId',JSON.stringify (groupeId));
+          
+      
+        }
+      
+        catch(error){
+          console.log(error)
+        }}
 
-
-saveGroupe=()=>{
-    fetch('http://192.168.137.15:3000/groupe/',{
+ saveGroupe(){
+    fetch('http://192.168.1.28:3000/groupe/',{
         method:'POST',
         headers:{
             Accept: 'application/json',
@@ -76,14 +86,16 @@ saveGroupe=()=>{
 
 
     }).then(response=> response.json())
-      .then(response=>{
+      .then( response=>{
         if(response.success==false)
         alert(response.message)
         if(response.success==true)
         {
           this.setState({nom:''})
           this.setState({description:''})
-          this.props.navigation.navigate('AddMember',{groupeId:response.groupeId})
+          this._storeData(response.groupeId)
+          
+          this.props.navigation.navigate('tabNavigatio')
         }
 
 
@@ -124,7 +136,7 @@ saveGroupe=()=>{
             </Item>
             <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}} >
               <Label style={{marginBottom:5}}>Description</Label>
-              <Textarea rowSpan={5} style={{ borderWidth: 1, borderRadius: 5, width:300}}  onChangeText={(text)=>this.setState({description:text})}/>
+              <Textarea rowSpan={5} style={{ borderWidth: 1, borderRadius: 5, width:'100%',padding:2}}  onChangeText={(text)=>this.setState({description:text})}/>
             </Item>
             
           </Form>
@@ -134,7 +146,7 @@ saveGroupe=()=>{
                justifyContent: 'center',
               }}>
           <Button
-              buttonStyle={{width:100 , margin:20}}
+              buttonStyle={{width:"100%" }}
               onPress={() => {this.saveGroupe()}}
               title="créer"
               

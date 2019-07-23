@@ -5,15 +5,30 @@ import {  Spinner } from 'native-base';
 import {View} from 'react-native'
 import Login from './src/screens/Login';
 import Drawer from './src/screens/Drawer'
+import AddPointsDescution from './src/screens/AddPointsDescution'
+import AddReunion from'./src/screens/AddRenion'
+import AddGroupe from'./src/screens/AddGroupe'
+import Aganda from './src/screens/Aganda'
+import Register from './src/screens/Register'
 
+import EditeReunion from './src/screens/EditeReunion'
+import AddMemember from './src/screens/AddMemebers'
+import AddDiscution from './src/screens/AddPointsDescution'
 // we will use these two screens later in our AppNavigator
-
+import tab from './src/screens/tabNavigation'
 const AppNavigator=createStackNavigator(
 
 { Auth:Login,
-  Drawer:Drawer
+    Register:Register,
+      EditeReunio:EditeReunion,
+      tabNavigatio:tab,
 
-
+      AddMemembe:AddMemember,
+      AddDiscutio:AddDiscution,
+      AddReunio:AddReunion,
+      AddTyp:AddGroupe,
+  Drawer:Drawer,
+ 
 
 },
 {
@@ -41,7 +56,7 @@ export default class App extends Component {
     return new Promise((resolve) =>
       setTimeout(
         () => { resolve('result') },
-        2000
+        0
       )
     );
   }

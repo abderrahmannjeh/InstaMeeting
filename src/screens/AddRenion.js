@@ -57,7 +57,7 @@ save=()=>{
 
 
 
-fetch('http://192.168.137.15:3000/reunion/',{
+fetch('http://192.168.1.28:3000/reunion/',{
 
   method:'POST',
   headers:{
@@ -165,7 +165,7 @@ this.getGroupeMombeurs(value);
 
 getGroupeList=()=>{
   
-  fetch("http://192.168.137.15:3000/groupe/getList",{
+  fetch("http://192.168.1.28:3000/groupe/getList",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -188,7 +188,7 @@ getGroupeList=()=>{
 
 }
 getGroupeMombeurs=(value)=>{
-  fetch("http://192.168.137.15:3000/groupe/getGroupeMemebers",{
+  fetch("http://192.168.1.28:3000/groupe/getGroupeMemebers",{
     method:'POST',
     headers:{
       Accept: 'application/json',
@@ -223,8 +223,8 @@ getGroupeMombeurs=(value)=>{
           //Renion informations
           <Container >
           <Header>
-          <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
-              <Icon name='menu' />
+          <Button transparent onPress={()=>this.props.navigation.goBack()} >
+              <Icon name='arrow-back' />
             </Button>
             <Body>
               <Title>Information</Title>
@@ -347,8 +347,8 @@ getGroupeMombeurs=(value)=>{
       this.state.show===false?
       <Container >
       <Header>
-      <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
-              <Icon name='menu' />
+      <Button transparent onPress={()=>this.props.navigation.goBack()} >
+              <Icon name='arrow-back' />
             </Button>
         <Body>
           <Title>Planification</Title>
