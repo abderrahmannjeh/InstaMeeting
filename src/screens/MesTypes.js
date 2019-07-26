@@ -20,7 +20,20 @@ import {
 
 
   export default class ListItemSelectedExample extends Component {
+    static navigationOptions ={
+      tabBarLabel: 'Logout',
   
+     
+      drawerIcon:(tintcolor)=>{
+  
+          return(
+              <Image source={require('../img/type.jpg')}
+              
+              style={{width: 50, height: 50, borderRadius: 400/ 2}}>
+  
+  
+              </Image>)
+      }}
   
   
   state={
@@ -34,6 +47,8 @@ import {
         {
          super(props)
          this.init()
+         this.props.navigation.addListener('didFocus',payload =>{this.getMesTypes(this.state.email)});
+
          } 
          
  
@@ -43,6 +58,7 @@ import {
           {
            await this.GetCourentUser()
            this.getMesTypes(this.state.email)
+           
           }
  
           async GetCourentUser() {
@@ -72,7 +88,6 @@ import {
             })
             }).then(response=>response.json())
               .then(response=>{
-                  alert("hi")
                 this.setState({Types:response.data})
             
               })
@@ -143,11 +158,11 @@ import {
 
             
             <Body>
-              <Title>Discutions</Title>
+              <Title>Types</Title>
             </Body>
             <Right>
             
-              <Icon style={{color: '#fff'}} name='add' onPress={() => {this.props.navigation.navigate('AddTyp')}}></Icon>
+              <Icon style={{color: '#01D758'}} name='add' onPress={() => {this.props.navigation.navigate('AddTyp')}}></Icon>
             </Right>
             
 
@@ -163,7 +178,7 @@ import {
            {this.state.Types.map((item,index)=>{ 
            return(<SwipeRow 
              leftOpenValue={75}
-             key={index}
+             key={item.id}
              left={
                  <Text onPress={() => this.delete(item.id,index)} style={{color:'red'}}>Remove</Text>
              }

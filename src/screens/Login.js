@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 import styles from "./styles";
-import { Text, View, TextInput} from 'react-native';
+import { Text, View, TextInput,ToastAndroid} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -90,7 +90,7 @@ body:JSON.stringify({
         else
         {
           this._storeData(response);
-          this.props.navigation.navigate('Aganda');
+          this.props.navigation.navigate('Home');
 
         }
     })

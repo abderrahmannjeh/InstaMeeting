@@ -10,6 +10,8 @@ import AddReunion from'./src/screens/AddRenion'
 import AddGroupe from'./src/screens/AddGroupe'
 import Aganda from './src/screens/Aganda'
 import Register from './src/screens/Register'
+import Logout from './src/screens/Logout'
+
 
 import EditeReunion from './src/screens/EditeReunion'
 import AddMemember from './src/screens/AddMemebers'
@@ -18,8 +20,8 @@ import AddDiscution from './src/screens/AddPointsDescution'
 import tab from './src/screens/tabNavigation'
 const AppNavigator=createStackNavigator(
 
-{ Auth:Login,
-    Register:Register,
+{     Auth:Login,
+      Register:Register,
       EditeReunio:EditeReunion,
       tabNavigatio:tab,
 
@@ -27,7 +29,8 @@ const AppNavigator=createStackNavigator(
       AddDiscutio:AddDiscution,
       AddReunio:AddReunion,
       AddTyp:AddGroupe,
-  Drawer:Drawer,
+      Logout:Logout,
+      Drawer:Drawer,
  
 
 },

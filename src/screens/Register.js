@@ -12,9 +12,9 @@ export default class Register extends React.Component {
   }
 
   register=()=>{
-   if (this.state.nameEr==false && this.state.emailEr==false &&  this.state.passwordEr ==false)
+   if ( this.state.emailEr==false &&  this.state.passwordEr ==false)
 
-    {   alert("hi")
+    {  
         fetch('http://192.168.1.28:3000/users/register',{
 
         method:'POST',
@@ -33,7 +33,6 @@ export default class Register extends React.Component {
         
         }).then(response => response.json())
             .then(response => {
-                console.log(response);
                 if(response.success===false)
                 ToastAndroid.show(response.message, ToastAndroid.SHORT);
 
@@ -73,22 +72,7 @@ export default class Register extends React.Component {
           </Header>
           <ScrollView>
           <Container style={{margin:10}} >
-       <Item stackedLabel error={this.state.nameEr} errorMessage='ENTER A VALID ERROR HERE'   >
-       <Icon name="ios-person"  style={{ color: '#0A69FE' }} />
-                <Label>Nom:</Label>
-                <Input value={this.state.nom}    onChangeText={(text)=>{
-                    if(text=='')
-                    this.setState({nameEr:true})
-                    else
-                    this.setState({nameEr:false})
-                    this.setState({nom:text})}} />
-                    
-                    
-        </Item>
-        {this.state.nameEr? <Text>Nom et require </Text>:<Text></Text>}
-
-        
-
+       
 
         <Item stackedLabel error={this.state.emailEr} >
             <Icon name="ios-person" style={{ color: '#0A69FE' }} />

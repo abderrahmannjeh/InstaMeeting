@@ -20,7 +20,7 @@ import {
   Footer,
   Fab
 } from "native-base";
-import {StyleSheet,View} from 'react-native';
+import {StyleSheet,View,Dimensions} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import RNCalendarEvents from 'react-native-calendar-events';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -233,44 +233,46 @@ getGroupeMombeurs=(value)=>{
           </Header>
          <Container  >
           <Content>
-            <Form>
-            <Item stackedLabel style={{marginBottom:10 ,  borderColor: 'transparent'}} >
-                <Label style={{marginBottom:5}}  >Groupe :</Label>
-                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
+            <Form style={{marginLeft:15,marginRight:15,marginTop:Dimensions.get('window').height*0.1}}>
+                <View style={style.Inputcontainer }>
+                <Label style={style.labelStyle} >Type :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5 }}>
                 <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle}
                  onValueChange={this.onValueChange.bind(this)}
                  //data={this.state.selectedGroupe}
                 
                 >
                  {this.state.groupes.map((data, key)=>(
                    
-                   <Picker.Item label={(data.id).toString()} value={data.name} key={key} />)
+                   <Picker.Item label={(data.name).toString()} value={data.id} key={key} />)
                    )}
 
                </Picker>
                </View>
-               </Item>
+               </View>
 
-
-               <Item stackedLabel  style={{marginBottom:5 ,borderColor: 'transparent'}} >
-              <Label style={{marginBottom:5}}>Titre:</Label>
-                <Input  value={this.state.titre} style={{ marginLeft:'5%',borderWidth: 1, borderRadius: 5 ,width:'90%'}} onChangeText={(text)=>{this.setState({titre:text})}} />
-              </Item>
               
-              <Item stackedLabel style={{marginBottom:7 ,  borderColor: 'transparent'}} >
-                <Label style={{marginBottom:5}}  >Resp Pv :</Label>
-                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
+               <View style={style.Inputcontainer}>
+              <Label  style={style.labelStyle} >Titre:</Label>
+                <View style={style.InputStyle}><Input  value={this.state.titre} style={{height:35,borderWidth: 1, borderRadius: 5,padding:2 }} onChangeText={(text)=>{this.setState({titre:text})}} /></View>
+                </View>
+              
+              
+              
+              <View style={style.Inputcontainer} >
+                <Label style={style.labelStyle}  >Resp Pv :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5 }}>
               <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle}
                  //data={this.state.selectedGroupe}
                  onValueChange={(value)=>{this.setState({respPv:value})}}
 
@@ -278,21 +280,21 @@ getGroupeMombeurs=(value)=>{
                  {
                    this.state.memebers.map((data, key)=>(
                    
-                   <Picker.Item label={(data.nom).toString()} value={data.nom} key={key} />)
+                   <Picker.Item label={(data.email).toString()} value={data.email} key={key} />)
                    )}
 
                </Picker>
                </View>
-               </Item>
-               <Item stackedLabel style={{marginBottom:7 ,  borderColor: 'transparent'}} >
-                <Label style={{marginBottom:5}}  >Resp Verif :</Label>
-                <View style={{ height:35, borderWidth: 1, borderRadius: 5, width:'90%' }}>
+               </View>
+               <View style={style.Inputcontainer} >
+                <Label style={style.labelStyle}  >Resp Verif :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5 }}>
               <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle }
                  //data={this.state.selectedGroupe}
                  onValueChange={(value)=>{this.setState({respVe:value})}}
 
@@ -300,20 +302,22 @@ getGroupeMombeurs=(value)=>{
                 >
                  {this.state.memebers.map((data, key)=>(
                    
-                   <Picker.Item label={(data.nom).toString()} value={data.nom} key={key} />)
+                   <Picker.Item label={(data.email).toString()} value={data.email} key={key} />)
                    )}
 
                </Picker>
                </View>
-               </Item>
-               <Item stackedLabel  style={{marginBottom:7 ,borderColor: 'transparent'}} >
-              <Label style={{marginBottom:5}}>Lieu :</Label>
-            <Input  value={this.state.lieu}  style={{ borderWidth: 1, borderRadius: 5 ,padding:2,width:'90%',marginLeft:'5%'}} onChangeText={(text)=>{this.setState({lieu:text})}} />
-          </Item>
-          <Item stackedLabel  style={{marginBottom:10 ,borderColor: 'transparent'}} >
-              <Label style={{marginBottom:5}}>Commentaire:</Label>
-              <Textarea rowSpan={2} style={{ borderWidth: 1, borderRadius: 5, width:'90%'}}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
-          </Item>
+               </View>
+
+               <View style={style.Inputcontainer} >
+              <Label style={style.labelStyle}>Lieu :</Label>
+            <View style={style.InputStyle}><Input  value={this.state.lieu}  style={{ borderWidth: 1, borderRadius: 5 ,padding:2}} onChangeText={(text)=>{this.setState({lieu:text})}} /></View>
+            </View>
+
+          <View style={style.Inputcontainer} >
+              <Label style={style.labelStyle}>Remarque:</Label>
+              <View style={{width: Dimensions.get('window').width*0.6}}><Textarea rowSpan={2} style={{ borderWidth: 1, borderRadius: 5}}  onChangeText={(text)=>{this.setState({commentaire:text}) }} /></View>
+          </View>
           </Form>
 
 
@@ -324,11 +328,7 @@ getGroupeMombeurs=(value)=>{
           </Content>
           
         </Container>
-        <Fab style={{marginTop:10}} position="bottomRight" onPress={() => {this.setState({show:false})}}
         
-        >
-            <Icon name="arrow-forward" />
-            </Fab>
         </Container>
       
       
@@ -356,7 +356,7 @@ getGroupeMombeurs=(value)=>{
         <Right />
       </Header>
       <Container >
-     <Container style={{marginTop:'30%'}} >
+     <Container style={{margin:5}} >
       <Content>
         <Form>
           <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
@@ -465,22 +465,11 @@ getGroupeMombeurs=(value)=>{
           
           
         </Form>
-        <Footer >
-        <FooterTab style={{backgroundColor:'white'}}>
-          
-          </FooterTab>
-          <FooterTab style={{backgroundColor:'white'}}>
-          
-          </FooterTab>
-          </Footer>
+       
          
         
       </Content>
-      <Fab position="bottomLeft" onPress={() => {this.setState({show:true})}}>
-      <Icon name="arrow-back" />
-
-
-      </Fab>
+      
       <Fab position="bottomRight" onPress={() => {this.save()}}>
          <Icon name="paper-plane" />
             
@@ -493,16 +482,31 @@ getGroupeMombeurs=(value)=>{
       
       
       }
-
+ <Footer>
+          <FooterTab>
+            <Button vertical onPress={()=>this.setState({show:true})}>
+              <Icon name="person" />
+              <Text>Info</Text>
+            </Button>
+            <Button vertical onPress={()=>this.setState({show:false})}>
+              <Icon name="disc" />
+              <Text>Plan</Text>
+            </Button>
+            
+          </FooterTab>
+        </Footer>
     
         
       </Container>
     )
   }
 }
+
 const style = StyleSheet.create({
-  container: {
-marginTop:100,
-justifyContent:'center'
-  }
+  Inputcontainer: {
+    flexDirection: 'row',
+    marginBottom:10
+  },
+  labelStyle:{width:Dimensions.get('window').width*0.3},
+  InputStyle:{width: Dimensions.get('window').width*0.6,height:35}
 });

@@ -17,9 +17,10 @@ import {
   Picker,
   Textarea,
   FooterTab,
-  Footer,Fab
+  Footer,
+  Fab
 } from "native-base";
-import {StyleSheet} from 'react-native';
+import {StyleSheet,View,Dimensions} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import RNCalendarEvents from 'react-native-calendar-events';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -119,20 +120,30 @@ update=()=>{
 {
  super(props)
  
- 
-
-
-
 }
+componentDidMount()
+{
+  this.init()
+  this.loadData()
+  this.getGroupeMombeurs(this.state.selectedGroupe)
+}
+
 
 didBlurSubscription = this.props.navigation.addListener(
   'didFocus',
   payload => {
     this.init();
     this.setState({operation:1})
-    if(this.props.navigation.state.params.id)
-    {   const id=this.props.navigation.state.params.id
+    this.loadData()
+    this.getGroupeMombeurs(this.state.selectedGroupe)
 
+    
+  }
+);
+loadData=()=>{
+  if(this.props.navigation.state.params.id)
+    {   const id=this.props.navigation.state.params.id
+        
       this.setState({id:id})
     this.setState({operation:2})
       
@@ -159,7 +170,7 @@ didBlurSubscription = this.props.navigation.addListener(
             respPv:response.data.respPv,
             respVe:response.data.respVe,
             commentaire:response.data.commentaire,
-        
+            
             selectedGroupe:response.data.id_groupe,
             groupeItems:undefined,
             date:response.data.date,
@@ -178,8 +189,7 @@ didBlurSubscription = this.props.navigation.addListener(
         })
     
     }
-  }
-);
+}
 async init()
 {
   await this.GetConnectUser();
@@ -268,8 +278,8 @@ getGroupeMombeurs=(value)=>{
           //Renion informations
           <Container >
           <Header>
-          <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
-              <Icon name='menu' />
+          <Button transparent onPress={()=>this.props.navigation.goBack()} >
+              <Icon name='arrow-back' />
             </Button>
             <Body>
               <Title>Information</Title>
@@ -278,40 +288,46 @@ getGroupeMombeurs=(value)=>{
           </Header>
          <Container  >
           <Content>
-            <Form>
-                <Item>
-                <Label >Groupe :</Label>
+            <Form style={{marginLeft:15,marginRight:15,marginTop:Dimensions.get('window').height*0.1}}>
+                <View style={style.Inputcontainer }>
+                <Label style={style.labelStyle} >Type :</Label>
+                <View style={{  borderWidth: 1, borderRadius: 5 }}>
                 <Picker
                 selectedValue={this.state.selectedGroupe}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle}
                  onValueChange={this.onValueChange.bind(this)}
                  //data={this.state.selectedGroupe}
                 
                 >
                  {this.state.groupes.map((data, key)=>(
                    
-                   <Picker.Item label={(data.id).toString()} value={data.id} key={key} />)
+                   <Picker.Item label={(data.name).toString()} value={data.id} key={key} />)
                    )}
 
                </Picker>
-               </Item>
+               </View>
+               </View>
 
-
-              <Item stackedLabel style={{marginBottom:10}}>
-                <Label>Titre:</Label>
-                <Input value={this.state.titre} style={{ borderColor: 'blue'}} onChangeText={(text)=>{this.state.titre=text}} />
-              </Item>
-              <Item>
-              <Label>Resp PV:</Label>
+              
+               <View style={style.Inputcontainer}>
+              <Label  style={style.labelStyle} >Titre:</Label>
+                <View style={style.InputStyle}><Input  value={this.state.titre} style={{height:35,borderWidth: 1, borderRadius: 5,padding:2 }} onChangeText={(text)=>{this.setState({titre:text})}} /></View>
+                </View>
+              
+              
+              
+              <View style={style.Inputcontainer} >
+                <Label style={style.labelStyle}  >Resp Pv :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5 }}>
               <Picker
-                selectedValue={this.state.selectedGroupe}
+                selectedValue={this.state.respPv}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle}
                  //data={this.state.selectedGroupe}
                  onValueChange={(value)=>{this.setState({respPv:value})}}
 
@@ -319,19 +335,21 @@ getGroupeMombeurs=(value)=>{
                  {
                    this.state.memebers.map((data, key)=>(
                    
-                   <Picker.Item label={(data.nom).toString()} value={data.nom} key={key} />)
+                   <Picker.Item label={(data.email).toString()} value={data.email} key={key} />)
                    )}
 
                </Picker>
-               </Item>
-              <Item >
-              <Label  >Res Verif:</Label>
+               </View>
+               </View>
+               <View style={style.Inputcontainer} >
+                <Label style={style.labelStyle}  >Resp Verif :</Label>
+                <View style={{ height:35, borderWidth: 1, borderRadius: 5 }}>
               <Picker
-                selectedValue={this.state.selectedGroupe}
+                selectedValue={this.state.respVe}
                  mode="dropdown"
                  iosHeader="Select your SIM"
                  iosIcon={<Icon name="arrow-down" />}
-                 style={{ width: undefined }}
+                 style={style.InputStyle }
                  //data={this.state.selectedGroupe}
                  onValueChange={(value)=>{this.setState({respVe:value})}}
 
@@ -339,33 +357,33 @@ getGroupeMombeurs=(value)=>{
                 >
                  {this.state.memebers.map((data, key)=>(
                    
-                   <Picker.Item label={(data.nom).toString()} value={data.nom} key={key} />)
+                   <Picker.Item label={(data.email).toString()} value={data.email} key={key} />)
                    )}
 
                </Picker>
-               </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
-            <Label>Lieu :</Label>
-            <Input  value={this.state.lieu}  onChangeText={(text)=>{this.setState({lieu:text})}} />
-          </Item>
-            <Item stackedLabel style={{marginBottom:10}}>
-              <Label>Commentaire:</Label>
-          <Input   value={this.state.commentaire}  onChangeText={(text)=>{this.setState({commentaire:text}) }} />
-          </Item>
+               </View>
+               </View>
+
+               <View style={style.Inputcontainer} >
+              <Label style={style.labelStyle}>Lieu :</Label>
+            <View style={style.InputStyle}><Input  value={this.state.lieu}  style={{ borderWidth: 1, borderRadius: 5 ,padding:2}} onChangeText={(text)=>{this.setState({lieu:text})}} /></View>
+            </View>
+
+          <View style={style.Inputcontainer} >
+              <Label style={style.labelStyle}>Remarque:</Label>
+              <View style={{width: Dimensions.get('window').width*0.6}}><Textarea rowSpan={2} style={{ borderWidth: 1, borderRadius: 5}}  onChangeText={(text)=>{this.setState({commentaire:text}) }} /></View>
+          </View>
           </Form>
 
 
-         
           
+         
   
             
           </Content>
-          <Fab position="bottomRight" onPress={() => {this.setState({show:false})}}>
-      <Icon name="arrow-forward" />
-
-
-      </Fab>
+          
         </Container>
+        
         </Container>
       
       
@@ -384,8 +402,8 @@ getGroupeMombeurs=(value)=>{
       this.state.show===false?
       <Container >
       <Header>
-      <Button transparent onPress={()=>this.props.navigation.openDrawer()} >
-              <Icon name='menu' />
+      <Button transparent onPress={()=>this.props.navigation.goBack()} >
+              <Icon name='arrow-back' />
             </Button>
         <Body>
           <Title>Planification</Title>
@@ -393,10 +411,10 @@ getGroupeMombeurs=(value)=>{
         <Right />
       </Header>
       <Container >
-     <Container  >
+     <Container style={{margin:5}} >
       <Content>
         <Form>
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Date Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -423,7 +441,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
 
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Duré Prévue:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -448,7 +466,7 @@ getGroupeMombeurs=(value)=>{
                 onDateChange={(date) => {this.setState({duree:date})}}
             />
           </Item>
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Heure Debut:</Label>
             <DatePicker
                 style={{width: 250}}
@@ -474,7 +492,7 @@ getGroupeMombeurs=(value)=>{
             />
           </Item>
 
-          <Item stackedLabel style={{marginBottom:15}}>
+          <Item stackedLabel style={{marginBottom:15 ,borderColor: 'transparent'}}>
             <Label style={{marginBottom:5}}>Heure Fin:     </Label>
             <DatePicker
                 style={{width: 250}}
@@ -502,15 +520,11 @@ getGroupeMombeurs=(value)=>{
           
           
         </Form>
-        
-
+       
+         
         
       </Content>
-      <Fab position="bottomLeft" onPress={() => {this.setState({show:true})}}>
-      <Icon name="arrow-back" />
-
-
-      </Fab>
+      
       <Fab position="bottomRight" onPress={() => {this.update()}}>
          <Icon name="paper-plane" />
             
@@ -523,7 +537,19 @@ getGroupeMombeurs=(value)=>{
       
       
       }
-
+ <Footer>
+          <FooterTab>
+            <Button vertical onPress={()=>this.setState({show:true})}>
+              <Icon name="person" />
+              <Text>Info</Text>
+            </Button>
+            <Button vertical onPress={()=>this.setState({show:false})}>
+              <Icon name="disc" />
+              <Text>Plan</Text>
+            </Button>
+            
+          </FooterTab>
+        </Footer>
     
         
       </Container>
@@ -531,8 +557,10 @@ getGroupeMombeurs=(value)=>{
   }
 }
 const style = StyleSheet.create({
-  container: {
-marginTop:100,
-justifyContent:'center'
-  }
+  Inputcontainer: {
+    flexDirection: 'row',
+    marginBottom:10
+  },
+  labelStyle:{width:Dimensions.get('window').width*0.3},
+  InputStyle:{width: Dimensions.get('window').width*0.6,height:35}
 });

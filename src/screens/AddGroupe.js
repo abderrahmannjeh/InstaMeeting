@@ -66,7 +66,6 @@ export default class AddGroup extends Component {
         }
       
         catch(error){
-          console.log(error)
         }}
 
  saveGroupe(){

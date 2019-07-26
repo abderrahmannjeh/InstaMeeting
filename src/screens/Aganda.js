@@ -13,12 +13,29 @@ import {ExpandableCalendar,  CalendarProvider} from 'react-native-calendars';
 import WeekView  from 'react-native-week-view';
 import { Icon,Fab, Container,Header,Left,Body,Title,Button,Right,Spinner } from 'native-base';
 
-
+import {Image} from 'react-native'
 
 
 
 
 export default class ExpandableCalendarScreen extends Component {
+
+  
+
+  static navigationOptions ={
+    tabBarLabel: 'Logout',
+
+   
+    drawerIcon:(tintcolor)=>{
+
+        return(
+            <Image source={require('../img/aganda.jpg')}
+            
+            style={{width: 50, height: 50, borderRadius: 400/ 2}}>
+
+
+            </Image>)
+    }}
 
   state={
     email:'',
@@ -31,9 +48,11 @@ export default class ExpandableCalendarScreen extends Component {
   constructor(props)
   {
     super(props);
-   this.init()
+   
 
   }
+  componentDidMount()
+  {this.init()}
   async init(){
     await this.GetConnectUser();
     
@@ -132,7 +151,7 @@ export default class ExpandableCalendarScreen extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Home</Title>
+            <Title>Aganda</Title>
           </Body>
           <Right />
         </Header>

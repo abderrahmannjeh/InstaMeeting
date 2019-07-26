@@ -20,7 +20,7 @@ import {
 
   import { Button } from 'react-native-elements';
 
-  import {StyleSheet,View,Image} from 'react-native'
+  import {StyleSheet,View,Image,Dimensions} from 'react-native'
   import { Table, Row, Rows } from 'react-native-table-component';
   import AsyncStorage from '@react-native-community/async-storage';
   import Modal from "react-native-modal";
@@ -65,6 +65,7 @@ export default class AddMemeber extends Component {
          {
           await this.GetGroupeId()
           this.getGroupeMombeurs(this.state.groupeId)
+          console.log(this.props)
 
          }
 
@@ -111,7 +112,9 @@ addDiscution=()=>{
           {
             var tab=this.state.discution
 
-            tab.push({"titre":this.state.titre,
+            tab.push({
+              "id":response.id,
+              "titre":this.state.titre,
             "groupeId":this.state.groupeId,
              "commentaire":this.state.commentaire,
             
@@ -156,17 +159,16 @@ getGroupeMombeurs=(value)=>{
 
 }
 
-delete=(email,index)=>{
-
-    fetch("http://192.168.1.28:3000/groupe/deleteMemeber",{
+delete=(id,index)=>{
+    alert(id)
+    fetch("http://192.168.1.28:3000/discution/delete",{
     method:"POST",
     headers:{
         Accept: 'application/json',
         'Content-Type': 'application/json'
     },
     body:JSON.stringify({
-        'groupeId':this.state.groupeId,
-        'email':email
+        "id":id
 
     })
 
@@ -177,7 +179,7 @@ delete=(email,index)=>{
         //    alert(response.message)
        // else
         
-        this.setState({memebers:this.state.memebers.splice(1,index)})
+        this.setState({discution:this.state.memebers.splice(1,index)})
 
       })
 
@@ -193,8 +195,10 @@ delete=(email,index)=>{
           <Header>
             <Left>
               
-                <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
-           
+            <Icon name="arrow-back" onPress={() => this.props.nav.goBack()}
+                style={{color: '#fff'}}
+                
+                />          
             </Left>
             
             
@@ -205,7 +209,7 @@ delete=(email,index)=>{
             </Body>
             <Right>
             
-              <Icon name='add' onPress={() => {this.setState({visible:true})}}></Icon>
+              <Icon name='add' onPress={() => {this.setState({visible:true})}} style={{color: '#01D758'}}></Icon>
             </Right>
             
 
@@ -214,9 +218,9 @@ delete=(email,index)=>{
           
           <ModalWrapper
           onRequestClose={this.onCancel}
-        style={{ width: '90%', height: '90%', paddingLeft: 24, paddingRight: 24 }}
+        style={{ width: Dimensions.get('window').width*0.9, height: Dimensions.get('window').height*0.7, paddingLeft: 24, paddingRight: 24 }}
         visible={this.state.visible}>
-            <View>
+            <Container>
           <Form >
           
 
@@ -273,7 +277,7 @@ delete=(email,index)=>{
               
               backgroundColor="#D55E2A"
             /></View>
-          </View>
+          </Container>
         </ModalWrapper>
          
          
@@ -287,9 +291,9 @@ delete=(email,index)=>{
             {this.state.discution.map((item,index)=>{ 
             return(<SwipeRow 
               leftOpenValue={75}
-              
+              key={item.id}
               left={
-                  <Text  style={{color:'red'}}>Remove</Text>
+                  <Text  style={{color:'red'}} onPress={()=>this.delete(item.id,index)}>Remove</Text>
               }
               body={
                 <View  >

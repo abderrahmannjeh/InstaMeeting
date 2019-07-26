@@ -47,20 +47,45 @@ export default class AddMemeber extends Component {
        {
         super(props)
         this.init()
+        
         } 
         
+loadMembers=()=>{
+  fetch("http://192.168.1.28:3000/groupe/getGroupeMemebers",{
+    method:'POST',
+    headers:{
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+  },
+  body:JSON.stringify({
+    "groupeId":this.state.groupeId
+  
+  
+  })
+  }).then(response=>response.json())
+    .then(response=>{
+      this.setState({memebers:response.data})
+      
+  
+  
+    })
+
+
+
+}
 
 
 
          async init()
          {
           await this.GetGroupeId()
+          this.loadMembers()
          }
 
          async GetGroupeId() {
           try {
               const groupeId= await AsyncStorage.getItem('groupeId');
-              alert(groupeId)
+              
               this.setState({groupeId:groupeId});
               
           }
@@ -148,7 +173,10 @@ delete=(email,index)=>{
           <Header>
             <Left>
               
-                <Icon name="menu" onPress={() => this.props.nav.openDrawer()} />
+            <Icon name="arrow-back" onPress={() => this.props.nav.goBack()}
+                style={{color: '#fff'}}
+                
+                />
            
             </Left>
             
@@ -171,7 +199,7 @@ delete=(email,index)=>{
               alignItems: 'center',
                justifyContent: 'center',
               }}>
-         <Item stackedLabel  style={{borderColor: 'transparent'}}>
+         <Item stackedLabel rounded  style={{borderColor: 'transparent'}}>
               <Label style={{marginBottom:5}}> Email</Label>
               <Input style={{ borderWidth: 1, borderRadius: 5,padding:2}} width={Dimensions.get('window').width*0.8} value={this.state.nvEmail} onChangeText={(text)=>this.setState({nvEmail:text})}/>
             </Item>
@@ -181,7 +209,7 @@ delete=(email,index)=>{
             <Icon
             name="add"
             onPress={() => this.addNomber()}
-              style={{marginTop:Dimensions.get('window').width*0.1,marginLeft:Dimensions.get('window').width*0.05}}
+              style={{marginTop:Dimensions.get('window').width*0.1,marginLeft:Dimensions.get('window').width*0.05, color: '#01D758'}}
             />
             
             </View>
